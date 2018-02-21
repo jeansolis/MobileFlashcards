@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 import { getDecks } from '../utils/api'
 import { connect } from 'react-redux'
 import { receiveDecks } from '../actions'
-import Deck from './Deck'
+import DeckListItem from './DeckListItem'
+import { getDeckKey } from '../utils/helpers'
 
 class Decks extends Component {
 
@@ -15,8 +16,14 @@ class Decks extends Component {
     }
 
     renderItem = ({item}) => {
+        const { navigation } = this.props
         return (
-            <Deck>{item}</Deck>
+            <TouchableOpacity onPress={() => navigation.navigate('Deck', {
+                    deckId: getDeckKey(item.title),
+                    title: item.title
+                })}>
+                <DeckListItem>{item}</DeckListItem>
+            </TouchableOpacity>
         )
     }
 

@@ -1,39 +1,40 @@
-import React, {Component} from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { gray } from '../utils/colors'
+import React, { Component } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { connect } from 'react-redux'
 
 class Deck extends Component {
     
-    render() {
-        console.log(this.props.children)
-        const {title, questions} = this.props.children
+    static navigationOptions = ({ navigation }) => {
+        const { title } = navigation.state.params        
 
+        return {
+            title: title
+        }
+    }
+
+    render() {
+        const {deck} = this.props
+        
         return (
-            <View style={styles.container}>
-                <Text style={styles.deckTitle}>{title}</Text>
-                <Text style={styles.deckSubtitle}>{questions.length} cards</Text>
+            <View>
+                <Text>{JSON.stringify(deck)}</Text>
             </View>
         )
     }
+
 }
 
 const styles = StyleSheet.create({
-    container: {
-        borderBottomWidth: 2,
-        marginLeft: 5,
-        marginRight: 5,
-        paddingTop: 40,
-        paddingBottom: 40
-    },
-    deckTitle: {
-        fontSize: 40,
-        textAlign: 'center'
-    },
-    deckSubtitle: {
-        color: gray,
-        fontSize: 20,
-        textAlign: 'center'
-    }
+
 })
 
-export default Deck
+function mapStateToProps(state, { navigation }){
+    
+    const {deckId} = navigation.state.params
+    
+    return {
+        deck: state[deckId]
+    }
+}
+
+export default connect(mapStateToProps)(Deck)

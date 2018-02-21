@@ -35,6 +35,11 @@ class NewDeck extends Component {
 
         //Save Deck into DB
         saveDeckTitle(newDeck).then(() => {
+            
+            //Clean input field
+            this.setState({
+                title: ''
+            })
 
             //Update Redux store
             this.props.addDeckTitle(newDeck)
