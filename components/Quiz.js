@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { View, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { white, black, red, green, blue } from '../utils/colors'
 import { connect } from 'react-redux'
+import { clearLocalNotification, setLocalNotification } from '../utils/helpers'
 
 class Quiz extends Component {
     
@@ -28,12 +29,20 @@ class Quiz extends Component {
 
     setAnswer = (correct) => {
         const { deck } = this.props
+        
+        //If this is the last question (quiz completed), reset Local Notification for tomorrow
+        if(this.state.currentIndex + 1 === this.state.totalQuestions ){
+            clearLocalNotification()
+            .then(setLocalNotification)
+        }
+
         this.setState((prevState) => ({
                 currentQuestion: prevState.currentIndex < prevState.totalQuestions ? deck.questions[prevState.currentIndex + 1] : null,
                 currentIndex: prevState.currentIndex < prevState.totalQuestions ? prevState.currentIndex + 1 : prevState.currentIndex,
                 correctQuantity: correct ? prevState.correctQuantity + 1 : prevState.correctQuantity,
                 viewMode: 'q',
         }))
+        
     }
 
     restart = () => {

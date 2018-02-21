@@ -11,6 +11,7 @@ import NewDeck from './components/NewDeck'
 import AddCard from './components/AddCard'
 import Quiz from './components/Quiz'
 import { black, white } from './utils/colors'
+import { setLocalNotification } from './utils/helpers'
 
 function FlashcardsStatusBar({ backgroundColor, ...props}){
   return (
@@ -71,6 +72,12 @@ const MainNavigator = StackNavigator({
 })
 
 export default class App extends React.Component {
+
+  componentDidMount() {
+    //Set local notification to remind the user to make a quiz daily
+    setLocalNotification()
+  }
+
   render() {
     return (
       <Provider store={createStore(reducer)}>
