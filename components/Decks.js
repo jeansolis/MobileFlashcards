@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, FlatList } from 'react-native'
 import { getDecks } from '../utils/api'
 import { connect } from 'react-redux'
 import { receiveDecks } from '../actions'
@@ -14,14 +14,17 @@ class Decks extends Component {
         })
     }
 
+    renderItem = ({item}) => {
+        return (
+            <Deck>{item}</Deck>
+        )
+    }
+
     render() {
         const { decks } = this.props
-        console.log(decks)
         return (
             <View>
-                {decks.map((deck) => (
-                    <Deck key={deck.title}>{deck}</Deck>
-                ))}                
+                <FlatList data={decks} renderItem={this.renderItem} keyExtractor={(item, index) => index} />
             </View>
         )
     }
