@@ -5,7 +5,6 @@ import { gray } from '../utils/colors'
 class DeckListItem extends Component {
     
     render() {
-        console.log(this.props.children)
         const {title, questions} = this.props.children
 
         return (

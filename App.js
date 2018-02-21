@@ -8,6 +8,7 @@ import reducer from './reducers'
 import Decks from './components/Decks'
 import Deck from './components/Deck'
 import NewDeck from './components/NewDeck'
+import AddCard from './components/AddCard'
 import { black, white } from './utils/colors'
 
 function FlashcardsStatusBar({ backgroundColor, ...props}){
@@ -45,12 +46,19 @@ const MainNavigator = StackNavigator({
     screen: Tabs
   },
   Deck: {
-    screen: Deck,
+    screen: Deck
+  },
+  AddCard: {
+    screen: AddCard,
     navigationOptions: {
-      headerTintColor: white,
-      headerStyle: {
-        backgroundColor: black
-      }
+      title: 'Add Card'
+    }
+  }
+}, {
+  navigationOptions: {
+    headerTintColor: white,
+    headerStyle: {
+      backgroundColor: black
     }
   }
 })
