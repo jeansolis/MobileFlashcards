@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native'
-import {} from '../utils/colors'
+import { View, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { white, black, red, green, blue } from '../utils/colors'
 import { connect } from 'react-redux'
 
 class Quiz extends Component {
@@ -8,12 +8,6 @@ class Quiz extends Component {
     state = {
         viewMode: 'q', //q (question) or a (answer),
         correctQuantity: 0
-    }
-
-    toggleViewMode = () => {
-        this.setState((prevState) => ({
-            viewMode: prevState.viewMode == 'q' ? 'a' : 'q'
-        }))
     }
 
     componentDidMount() {
@@ -26,12 +20,19 @@ class Quiz extends Component {
         })
     }
 
+    toggleViewMode = () => {
+        this.setState((prevState) => ({
+            viewMode: prevState.viewMode == 'q' ? 'a' : 'q'
+        }))
+    }
+
     setAnswer = (correct) => {
         const { deck } = this.props
         this.setState((prevState) => ({
                 currentQuestion: prevState.currentIndex < prevState.totalQuestions ? deck.questions[prevState.currentIndex + 1] : null,
                 currentIndex: prevState.currentIndex < prevState.totalQuestions ? prevState.currentIndex + 1 : prevState.currentIndex,
-                correctQuantity: correct ? prevState.correctQuantity + 1 : prevState.correctQuantity
+                correctQuantity: correct ? prevState.correctQuantity + 1 : prevState.correctQuantity,
+                viewMode: 'q',
         }))
     }
 
@@ -50,43 +51,59 @@ class Quiz extends Component {
         const { viewMode, currentQuestion, currentIndex, totalQuestions, correctQuantity } = this.state
 
         return (
-            <View>
+            <View style={styles.container}>
                 {currentQuestion ?
-                <View>
-                    <Text style={styles.pager}>{currentIndex + 1} / {totalQuestions}</Text>
-                    <Text style={styles.qaLabel}>
-                        {viewMode === 'q' ?
-                        currentQuestion.question
-                        :
-                        currentQuestion.answer
-                        }
-                    </Text>
-                    <TouchableOpacity onPress={this.toggleViewMode}>
-                        <Text>
-                            {viewMode === 'q' ?
-                            'Answer'
-                            :
-                            'Question'
-                            }
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.setAnswer(true)}>
-                        <Text>Correct</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.setAnswer(false)}>
-                        <Text>Incorrect</Text>
-                    </TouchableOpacity>
+                <View style={styles.container}>
+                    <View style={styles.pagerLabelContainer}>
+                        <Text style={styles.pagerLabel}>{currentIndex + 1} / {totalQuestions}</Text>
+                    </View>
+                    <View style={styles.qaLabelContainer}>
+                        <ScrollView>
+                            <Text style={styles.qaLabel}>
+                                {viewMode === 'q' ?
+                                currentQuestion.question
+                                :
+                                currentQuestion.answer
+                                }
+                            </Text>
+                            <TouchableOpacity onPress={this.toggleViewMode}>
+                                <Text style={styles.viewModeChoiceLabel}>
+                                    {viewMode === 'q' ?
+                                    'Answer'
+                                    :
+                                    'Question'
+                                    }
+                                </Text>
+                            </TouchableOpacity>
+                        </ScrollView>
+                    </View>
+                    <View style={styles.buttonsContainer}>
+                        <TouchableOpacity style={styles.CorrectBtn} onPress={() => this.setAnswer(true)}>
+                            <Text style={styles.CorrectBtnText}>Correct</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.IncorrectBtn} onPress={() => this.setAnswer(false)}>
+                            <Text style={styles.IncorrectBtnText}>Incorrect</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 :
-                <View>
-                    <Text>Your final score is {(correctQuantity / totalQuestions * 100).toFixed(2)}%</Text>
-                    <Text>{correctQuantity < totalQuestions ? correctQuantity : 'All'} question{correctQuantity !== 1 ? 's': ''} answered correctly.</Text>
-                    <TouchableOpacity onPress={this.restart}>
-                        <Text>Restart Quiz</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.goBack() }>
-                        <Text>Back to Deck</Text>
-                    </TouchableOpacity>
+                <View style={styles.container}>
+                    <View style={styles.scoreContainer}>
+                        <Text style={styles.scorePercentageLabel}>
+                            Your final score is {(correctQuantity / totalQuestions * 100).toFixed(0)}%
+                        </Text>
+                        <Text style={styles.scoreCorrectQuantityLabel}>
+                            {correctQuantity < totalQuestions ? correctQuantity : 'All'} question{correctQuantity !== 1 || totalQuestions == 1 ? 's': ''} answered correctly.
+                        </Text>
+                    </View>
+                    <View style={styles.scoreButtonsContainer}>
+                        <TouchableOpacity style={styles.RestartQuizBtn} onPress={this.restart}>
+                            <Text style={styles.RestartQuizBtnText}>Restart Quiz</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.GoBackToDeckBtn} onPress={() => navigation.goBack() }>
+                            <Text style={styles.GoBackToDeckBtnText}>Back to Deck</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 }
             </View>
@@ -96,13 +113,113 @@ class Quiz extends Component {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+    },
+    pagerLabelContainer: {
         flex: 1
     },
     pagerLabel: {
-
+        marginTop: 5,
+        marginLeft: 5,
+        fontSize: 20
+    },
+    qaLabelContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 5,
+        paddingLeft: 5,
+        paddingRight: 5
     },
     qaLabel: {
-
+        fontSize: 42,
+        textAlign: 'center',
+    },
+    viewModeChoiceLabel: {
+        color: red,
+        fontSize: 20,
+        alignSelf: 'center'
+    },
+    buttonsContainer: {
+        flex: 4                
+    },
+    CorrectBtn: {
+        backgroundColor: green,
+        borderRadius: 8,
+        marginBottom: 20,
+        marginLeft: 50,
+        marginRight: 50,
+        paddingBottom: 20,
+        paddingLeft: 40,
+        paddingRight: 40,
+        paddingTop: 20
+    },
+    CorrectBtnText: {
+        color: white,
+        fontSize: 24,
+        textAlign: 'center'
+    },
+    IncorrectBtn: {
+        backgroundColor: red,
+        borderRadius: 8,
+        marginLeft: 50,
+        marginRight: 50,
+        paddingBottom: 20,
+        paddingLeft: 40,
+        paddingRight: 40,
+        paddingTop: 20
+    },
+    IncorrectBtnText: {
+        color: white,
+        fontSize: 24,
+        textAlign: 'center'
+    },
+    scoreContainer: {
+        flex: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingLeft: 5,
+        paddingRight: 5
+    },
+    scorePercentageLabel: {
+        fontSize: 28
+    },
+    scoreCorrectQuantityLabel: {
+        fontSize: 18,
+        color: blue
+    },
+    scoreButtonsContainer: {
+        flex: 2
+    },  
+    RestartQuizBtn: {
+        backgroundColor: white,
+        borderRadius: 8,
+        marginBottom: 20,
+        marginLeft: 50,
+        marginRight: 50,
+        paddingBottom: 20,
+        paddingLeft: 40,
+        paddingRight: 40,
+        paddingTop: 20
+    },
+    RestartQuizBtnText: {
+        color: black,
+        fontSize: 24,
+        textAlign: 'center'
+    },
+    GoBackToDeckBtn: {
+        backgroundColor: black,
+        borderRadius: 8,
+        marginLeft: 50,
+        marginRight: 50,
+        paddingBottom: 20,
+        paddingLeft: 40,
+        paddingRight: 40,
+        paddingTop: 20
+    },
+    GoBackToDeckBtnText: {
+        color: white,
+        fontSize: 24,
+        textAlign: 'center'
     }
 })
 
