@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native'
 import { getDeckKey, formatDecks } from './helpers'
 
-const STORAGE_KEY = 'MobileFlashCards:Main'
+const STORAGE_KEY = 'MobileFlashCards:MainJS1'
 
 export function getDecks(){
     return AsyncStorage.getItem(STORAGE_KEY)

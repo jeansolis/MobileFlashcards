@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native'
 import { Notifications, Permissions } from 'expo'
 
-const NOTIFICATION_KEY = 'MobileFlashCards:Notifications'
+const NOTIFICATION_KEY = 'MobileFlashCards:NotificationsJS1'
 
 export function getDeckKey(title){
     return title.replace(/ /g,'').toLowerCase()
