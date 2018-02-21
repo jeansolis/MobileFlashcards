@@ -2,6 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View, StatusBar } from 'react-native';
 import { TabNavigator } from 'react-navigation'
 import { Constants } from 'expo'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import reducer from './reducers'
 import Decks from './components/Decks'
 import NewDeck from './components/NewDeck'
 
@@ -31,10 +34,12 @@ const Tabs = TabNavigator({
 export default class App extends React.Component {
   render() {
     return (
-      <View style={{flex: 1}}>
-        <FlashcardsStatusBar backgroundColor='black' barStyle='light-content' />
-        <Tabs />
-      </View>
+      <Provider store={createStore(reducer)}>
+        <View style={{flex: 1}}>
+          <FlashcardsStatusBar backgroundColor='black' barStyle='light-content' />
+          <Tabs />
+        </View>
+      </Provider>
     );
   }
 }

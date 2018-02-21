@@ -6,29 +6,51 @@ import {
     StyleSheet, 
     TouchableOpacity } from 'react-native'
 import { black, white } from '../utils/colors'
+import { saveDeckTitle, getDecks } from '../utils/api'
+import { connect } from 'react-redux'
+import { addDeckTitle } from '../actions'
+import { getDeckKey } from '../utils/helpers'
 
-
-class Decks extends Component {
+class NewDeck extends Component {
 
     state = {
         title: ''
-    }
+    }  
 
     handleTitleChange = (title) => {
-        this.setState({title})
+        this.setState({ title })
     }
 
     submitDeck = () => {
-        
+        const { title } = this.state
+        const { navigation } = this.props
+
+        //Build deck
+        const newDeck = {
+            [getDeckKey(title)]: {
+                title, 
+                questions: []
+            }
+        }
+
         //Save Deck into DB
+        saveDeckTitle(newDeck).then(() => {
 
-        //Go back to Decks
+            //Update Redux store
+            this.props.addDeckTitle(newDeck)
 
+            //Go back to Decks
+            navigation.navigate('Decks')
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+        
     }
 
     render() {
         const {title} = this.state
-
+        
         return (
             <KeyboardAvoidingView behavior='padding' style={styles.container}>
                 <Text style={styles.titleLabel}>What is the title of your new deck?</Text>
@@ -78,4 +100,15 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Decks
+function mapStateToProps(state){
+    return {
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return {
+        addDeckTitle: (deck) => dispatch(addDeckTitle(deck))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewDeck)
