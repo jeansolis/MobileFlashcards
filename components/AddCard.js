@@ -26,7 +26,7 @@ class AddCard extends Component {
 
     submitCard = () => {
         const { question, answer } = this.state
-        const { addCard } = this.props
+        const { addCard, navigation } = this.props
         const { deckId } = this.props.navigation.state.params
         
         // Build Card 
@@ -47,6 +47,9 @@ class AddCard extends Component {
 
             //Update Redux store
             addCard(card)
+
+            //Go back to the current deck
+            navigation.goBack()
         })
 
     }

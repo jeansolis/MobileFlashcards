@@ -9,6 +9,7 @@ import Decks from './components/Decks'
 import Deck from './components/Deck'
 import NewDeck from './components/NewDeck'
 import AddCard from './components/AddCard'
+import Quiz from './components/Quiz'
 import { black, white } from './utils/colors'
 
 function FlashcardsStatusBar({ backgroundColor, ...props}){
@@ -52,6 +53,12 @@ const MainNavigator = StackNavigator({
     screen: AddCard,
     navigationOptions: {
       title: 'Add Card'
+    }
+  },
+  Quiz: {
+    screen: Quiz,
+    navigationOptions: {
+      title: 'Quiz'
     }
   }
 }, {

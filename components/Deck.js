@@ -29,7 +29,9 @@ class Deck extends Component {
                         })} >
                         <Text style={styles.AddCardBtnText}>Add Card</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.StartQuizBtn}>
+                    <TouchableOpacity style={styles.StartQuizBtn} disabled={deck.questions.length == 0} onPress={() => navigation.navigate('Quiz', {
+                        deckId: getDeckKey(deck.title)
+                        }) }>
                         <Text style={styles.StartQuizBtnText}>Start Quiz</Text>
                     </TouchableOpacity>
                 </View>
