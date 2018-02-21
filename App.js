@@ -25,13 +25,13 @@ const Tabs = TabNavigator({
   Decks: {
     screen: Decks,
     navigationOptions: {
-      tabBarLabel: 'Decks'
+      tabBarLabel: 'DECKS'
     }
   },
   NewDeck: {
     screen: NewDeck,
     navigationOptions: {
-      tabBarLabel: 'New Deck'
+      tabBarLabel: 'NEW DECK'
     }
   }
 }, {
@@ -39,7 +39,11 @@ const Tabs = TabNavigator({
     header: null
   },
   tabBarOptions: {
-
+    inactiveTintColor: black,
+    activeTintColor: black,
+    style: {
+      backgroundColor: white
+    }
   }
 })
 
