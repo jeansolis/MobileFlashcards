@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { KeyboardAvoidingView, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { black, white } from '../utils/colors'
+import { addCardToDeck } from '../utils/api'
+import { addCard } from '../actions'
+import { connect } from 'react-redux'
 
 class AddCard extends Component {    
 
@@ -21,10 +24,37 @@ class AddCard extends Component {
         })
     }
 
+    submitCard = () => {
+        const { question, answer } = this.state
+        const { addCard } = this.props
+        const { deckId } = this.props.navigation.state.params
+        
+        // Build Card 
+        const card = {
+            deckId,
+            question,
+            answer
+        }
+
+        // Save card into DB
+        addCardToDeck(card).then(() => {
+
+            //Clean input fields
+            this.setState({
+                question: '',
+                answer: ''
+            })
+
+            //Update Redux store
+            addCard(card)
+        })
+
+    }
+
     render(){
         const { question, answer } = this.state
         const { deckId } = this.props.navigation.state.params
-        console.log('deckId is ', deckId)
+        
         return (
             <KeyboardAvoidingView behavior='padding' style={styles.container}>
                 <TextInput style={styles.input} value={question} onChangeText={this.handleQuestionText} placeholder="Type a question..." maxLength={200} />
@@ -69,4 +99,16 @@ const styles = StyleSheet.create({
     }
 })
 
-export default AddCard
+function mapStateToProps(state){
+    return {
+        
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return {
+        addCard: (card) => dispatch(addCard(card))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddCard)

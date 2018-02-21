@@ -10,7 +10,7 @@ class DeckListItem extends Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.deckTitle}>{title}</Text>
-                <Text style={styles.deckSubtitle}>{questions.length} cards</Text>
+                <Text style={styles.deckSubtitle}>{questions.length} {questions.length == 1 ? 'card' : 'cards'}</Text>
             </View>
         )
     }

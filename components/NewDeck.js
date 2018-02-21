@@ -44,8 +44,8 @@ class NewDeck extends Component {
             //Update Redux store
             this.props.addDeckTitle(newDeck)
 
-            //Go back to Decks
-            navigation.navigate('Decks')
+            //Navigate to Deck View
+            navigation.navigate('Deck', {deckId: getDeckKey(title)})
         })
         .catch((err) => {
             console.log(err)

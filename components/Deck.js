@@ -21,7 +21,7 @@ class Deck extends Component {
             <View style={styles.container}>
                 <View>
                     <Text style={styles.deckTitle}>{deck.title}</Text>
-                    <Text style={styles.deckSubtitle}>{deck.questions.length} cards</Text>
+                    <Text style={styles.deckSubtitle}>{deck.questions.length} {deck.questions.length == 1 ? 'card' : 'cards'}</Text>
                 </View>
                 <View>
                     <TouchableOpacity style={styles.AddCardBtn} onPress={() => navigation.navigate('AddCard', {
